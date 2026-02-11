@@ -10,9 +10,11 @@ class GameService
     /**
      * @return Collection<int, Game>
      */
-    public function list(): Collection
+    public function list(?string $userId = null): Collection
     {
-        return Game::all();
+        return Game::query()
+            ->when($userId, fn ($query) => $query->where('user_id', $userId))
+            ->get();
     }
 
     public function find(string $id): Game

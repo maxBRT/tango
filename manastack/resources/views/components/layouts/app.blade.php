@@ -1,4 +1,4 @@
-<x-layouts.base class="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-900">
+<x-layouts.base class="min-h-screen flex flex-col bg-muted">
     <header class="w-full max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
         <flux:heading size="lg">{{ config('app.name', 'ManaStack') }}</flux:heading>
 

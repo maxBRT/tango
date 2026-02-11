@@ -2,55 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGameRequest;
+use App\Http\Requests\UpdateGameRequest;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use App\Services\GameService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GameApiController extends Controller
 {
     public function __construct(public GameService $gameService) {}
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
         return GameResource::collection($this->gameService->list());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): GameResource
+    public function store(StoreGameRequest $request): GameResource
     {
-        $game = $this->gameService->create($request->all());
+        $game = $this->gameService->create($request->validated());
 
         return new GameResource($game);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Game $game): GameResource
     {
         return new GameResource($this->gameService->find($game->id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Game $game): GameResource
+    public function update(UpdateGameRequest $request, Game $game): GameResource
     {
-        $game = $this->gameService->update($game->id, $request->all());
+        $game = $this->gameService->update($game->id, $request->validated());
 
         return new GameResource($game);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Game $game): \Illuminate\Http\JsonResponse
+    public function destroy(Game $game): JsonResponse
     {
         $this->gameService->delete($game->id);
 

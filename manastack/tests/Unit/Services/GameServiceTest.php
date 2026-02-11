@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Services\GameService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class GameServiceTest extends TestCase
@@ -67,22 +66,6 @@ class GameServiceTest extends TestCase
         $this->assertEquals($user->id, $game->user_id);
     }
 
-    public function test_create_fails_without_title(): void
-    {
-        $user = User::factory()->create();
-
-        $this->expectException(ValidationException::class);
-
-        $this->gameService->create(['user_id' => $user->id]);
-    }
-
-    public function test_create_fails_without_user_id(): void
-    {
-        $this->expectException(ValidationException::class);
-
-        $this->gameService->create(['title' => 'Dark Souls']);
-    }
-
     public function test_update_modifies_a_game(): void
     {
         $game = Game::factory()->create(['title' => 'Old Title']);
@@ -91,15 +74,6 @@ class GameServiceTest extends TestCase
 
         $this->assertEquals('New Title', $updated->title);
         $this->assertDatabaseHas('games', ['id' => $game->id, 'title' => 'New Title']);
-    }
-
-    public function test_update_fails_without_title(): void
-    {
-        $game = Game::factory()->create();
-
-        $this->expectException(ValidationException::class);
-
-        $this->gameService->update($game->id, []);
     }
 
     public function test_update_throws_exception_for_invalid_id(): void

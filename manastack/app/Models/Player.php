@@ -8,27 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Game extends Model
+class Player extends Model
 {
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'title',
-        'user_id',
+        'game_id',
+        'client_id',
     ];
 
-    public function user(): BelongsTo
+    public function game(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Game::class);
     }
 
-    public function players(): HasMany
+    public function saves(): HasMany
     {
-        return $this->hasMany(Player::class);
-    }
-
-    public function apiKeys(): HasMany
-    {
-        return $this->hasMany(ApiKey::class);
+        return $this->hasMany(Save::class);
     }
 }
